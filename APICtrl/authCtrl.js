@@ -28,13 +28,11 @@ router.post('/login', (req, res)=>{
     var usrname = req.body.username;
     var passw = req.body.password;
     var type = req.body.type;
-    console.log(req.body)
     if(!usrname || !passw || !type) {
         res.json("err--");
     }
     UserRepos.login(usrname, passw, type)
        .then(user =>{
-           console.log(user);
            if(user){             
                var acToken = AuthRepos.generateAccessToken(user);
                var rfToken = AuthRepos.generateRefreshToken();

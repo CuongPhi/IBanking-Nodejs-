@@ -6,12 +6,15 @@ var app = express();
 var userCtrl = require('./APICtrl/userCtrl');
 var authenRepos = require('./repos/auth');
 var authenCtrl = require('./APICtrl/authCtrl');
+var accountCtrl = require('./APICtrl/b_accountCtrl');
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api/user/', authenRepos.verifyAccessToken, userCtrl);
+app.use('/api/account/', authenRepos.verifyAccessToken, accountCtrl);
+
 app.use('/api/auth/', authenCtrl)
 
 app.use((req,res)=>{

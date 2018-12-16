@@ -14,8 +14,8 @@ class UserRepos {
     login(username, password, type) {
         return DbFunction.getOne(`SELECT * FROM ${tableName}  WHERE username = '${username}' AND password = '${password}' AND user_type = ${type}`);
     }
-    getByToken(id, token){
-        var sql = `SELECT * FROM ${tableName}  WHERE uid = ${id} AND rfToken = '${token}'`;
+    getByToken(username, token){
+        var sql = `SELECT * FROM ${tableName}  WHERE username = '${username}' AND rfToken = '${token}'`;
         return DbFunction.getOne(sql);
     }
 

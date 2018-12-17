@@ -3,6 +3,7 @@ var UserRepos = require('../repos/user');
 var AuthRepos = require('../repos/auth');
 var AccRepos = require('../repos/b_account');
 const MONEY_TRANSACTION = 1100;
+var moment = require('moment');
 
 router.post('/accounts', (req, res)=>{
     var uid = req.token_payload.user.uid;
@@ -58,14 +59,22 @@ router.post('/trans', (req, res) =>{
     var from = req.body.account_from;
     var to = req.body.account_to;
     var money =  parseInt(req.body.money);
+    var note = req.body.note;
     var type_trans = req.body.type;
     if(!from || !to || !money || !(type_trans == 1 || type_trans == 0 )) {
         res.status(404).json('Transaction invalid, plz check again !');
     }
     Promise.all([AccRepos.getBankAccountsByNumber(from), AccRepos.getBankAccountsByNumber(to)])
     .then(values=>{
-        var account_from = values[0];
-        var account_to = values[1];
+        var account_from;
+        var account_to;
+        if(values[0].account_number == from) {
+             account_from = values[0];
+             account_to = values[1];
+        } else {
+             account_from = values[1];
+             account_to = values[0];
+        }
         var balance_from = parseInt(account_from.balance);
         var balance_to = parseInt(account_to.balance);
 
@@ -80,8 +89,10 @@ router.post('/trans', (req, res) =>{
                 balance_to += (money - MONEY_TRANSACTION);
             }
         }
+        var time =  moment().unix();
         Promise.all([AccRepos.updateBankAccount(account_from.account_number, balance_from),
-            AccRepos.updateBankAccount(account_to.account_number, balance_to)])
+            AccRepos.updateBankAccount(account_to.account_number, balance_to),
+             AccRepos.addTransaction(account_from.account_number, account_to.account_number, money, time, note )])
         .then(()=>{
             res.status(200).json('Transaction successfully !');
         }).catch(err=>{
@@ -107,5 +118,19 @@ router.post('/addnew', (req, res)=>{
         })
      }
 });
+
+router.post('/transhistory', (req, res)=>{
+    var uid = req.token_payload.user.uid;
+    AccRepos.getTransactionHistory(uid)
+    .then(rows =>{
+        res.status(200).json(rows);
+
+    })
+    .catch(err=>{
+        res.status(404).json(err);
+    })
+    
+});
+
 
 module.exports = router;

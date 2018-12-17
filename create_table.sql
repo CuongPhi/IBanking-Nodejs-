@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th12 16, 2018 lúc 04:20 PM
+-- Thời gian đã tạo: Th12 17, 2018 lúc 04:34 PM
 -- Phiên bản máy phục vụ: 10.1.32-MariaDB
 -- Phiên bản PHP: 7.2.5
 
@@ -34,6 +34,17 @@ CREATE TABLE `bank_account` (
   `account_number` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Đang đổ dữ liệu cho bảng `bank_account`
+--
+
+INSERT INTO `bank_account` (`uid`, `balance`, `account_number`) VALUES
+(3, 392800, 5369569875811),
+(4, 37780, 5504205075811),
+(3, 9747800, 5504236575866),
+(4, 346700, 5633230275444),
+(4, 1313920, 5987451236544);
+
 -- --------------------------------------------------------
 
 --
@@ -46,6 +57,15 @@ CREATE TABLE `beneficiary` (
   `account_number` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Đang đổ dữ liệu cho bảng `beneficiary`
+--
+
+INSERT INTO `beneficiary` (`uid`, `suggested_name`, `account_number`) VALUES
+(3, 'Cường phi', 5504205075811),
+(3, 'Cường BIDV', 5987451236544),
+(4, 'Cường VPBank', 5369569875811);
+
 -- --------------------------------------------------------
 
 --
@@ -56,8 +76,21 @@ CREATE TABLE `transaction` (
   `account_send` bigint(20) NOT NULL,
   `account_recieve` bigint(20) NOT NULL,
   `number_money` bigint(20) NOT NULL,
-  `time` int(11) NOT NULL
+  `time` int(11) NOT NULL,
+  `note` text COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `transaction`
+--
+
+INSERT INTO `transaction` (`account_send`, `account_recieve`, `number_money`, `time`, `note`) VALUES
+(5504236575866, 5633230275444, 100000, 1545057590, 'nhậu chơi'),
+(5504236575866, 5633230275444, 100000, 1545057659, 'nhậu chơi'),
+(5504236575866, 5633230275444, 50000, 1545057680, 'nhậu chơi'),
+(5369569875811, 5987451236544, 30000, 1545060049, '4 qua 3'),
+(5504205075811, 5987451236544, 60020, 1545060102, '4 qua 3 tk khác'),
+(5369569875811, 5987451236544, 25000, 1545060174, '3 qua 4 nè');
 
 -- --------------------------------------------------------
 
@@ -81,9 +114,9 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`username`, `password`, `rfToken`, `name`, `email`, `phone`, `user_type`, `uid`) VALUES
-('admin', 'admin', 'seDMPyrNBMByEl2FE6czr1eXJPEX6eNwmf8qJiTP8b3tg9oudPIbj9gLbXAXdwgS6wOeysea2IaZF6l7', '', '', '', 1, 1),
-('cuonghothit', 'doccocuong', '', '', '', '', 0, 3),
-('nficuong', 'cuonghothit', '', '', '', '', 0, 4);
+('admin', 'admin', 'ckcWLVZYDSKeFgzFOc3PqFWZXigEchuGymP6Hv87QC4vebbMFcPmggOaczhLzvRZdSWzjrWdkPezoL73', '', '', '', 1, 1),
+('cuonghothit', 'doccocuong', 'wSWyiI2jzZUu07huSkEKFVxBIFy8JHWd8tb8q1moN4m1hPHRkLbOQCutNXEe1WVWCF2G1ffesXPVxYzU', '', '', '', 0, 3),
+('nficuong', 'cuonghothit', 'TNJE9a8jC1X6CmhxtW3RYocMSAFXSjOU6J8mYpDa5izHloTOXAAioO3pNtjPLTYGuJe5nPIP0Q3jcSri', '', '', '', 0, 4);
 
 --
 -- Chỉ mục cho các bảng đã đổ

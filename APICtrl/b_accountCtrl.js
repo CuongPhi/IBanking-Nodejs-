@@ -11,10 +11,10 @@ router.post('/accounts', (req, res)=>{
         AccRepos.getBankAccountsByUid(uid)
         .then(rows=>{
              console.log(rows);
-             res.status(200).json(rows);
+             res.status(200).send(rows);
          })
         .catch(err =>{
-            res.status(400).json(err);
+            res.status(400).send(err);
         })
      }
 });
@@ -24,10 +24,10 @@ router.post('/beneficiaries', (req, res)=>{
         AccRepos.getBeneficiaryByUid(uid)
         .then(rows=>{
              console.log(rows);
-             res.status(200).json(rows);
+             res.status(200).send(rows);
          })
         .catch(err =>{
-            res.status(400).json(err);
+            res.status(400).send(err);
         })
      }
 });
@@ -41,18 +41,18 @@ router.post('/addbeneficiary', (req, res)=>{
         if(user) {
             AccRepos.addBeneficiaryByUid(uid, ssname, number_account)
             .then(()=>{
-                res.status(200).json("addnew beneficiary successfully");
+                res.status(200).send("addnew beneficiary successfully");
             })
             .catch(err=>{
                 console.log(err);
-                res.status(400).json("addnew beneficiary failure !");
+                res.status(400).send("addnew beneficiary failure !");
             })
         } else {
-            res.status(404).json("number account not found !");
+            res.status(404).send("number account not found !");
         }
     }).catch(err=>{
         console.log(err);
-        res.status(400).json("addnew beneficiary failure !");
+        res.status(400).send("addnew beneficiary failure !");
     });
 });
 router.post('/trans', (req, res) =>{
@@ -62,7 +62,7 @@ router.post('/trans', (req, res) =>{
     var note = req.body.note;
     var type_trans = req.body.type;
     if(!from || !to || !money || !(type_trans == 1 || type_trans == 0 )) {
-        res.status(404).json('Transaction invalid, plz check again !');
+        res.status(404).send('Transaction invalid, plz check again !');
     }
     Promise.all([AccRepos.getBankAccountsByNumber(from), AccRepos.getBankAccountsByNumber(to)])
     .then(values=>{
@@ -94,14 +94,14 @@ router.post('/trans', (req, res) =>{
             AccRepos.updateBankAccount(account_to.account_number, balance_to),
              AccRepos.addTransaction(account_from.account_number, account_to.account_number, money, time, note )])
         .then(()=>{
-            res.status(200).json('Transaction successfully !');
+            res.status(200).send('Transaction successfully !');
         }).catch(err=>{
             console.log(err);
-            res.status(400).json('Transaction failure !' + err);
+            res.status(400).send('Transaction failure !' + err);
         })
     })
     .catch(err=>{
-        res.status(400).json('Transaction failure !' + err);
+        res.status(400).send('Transaction failure !' + err);
     })
 });
 
@@ -111,10 +111,10 @@ router.post('/addnew', (req, res)=>{
     if(uid) {
         AccRepos.addNewBankAccount(uid, num)
         .then(()=>{             
-             res.status(200).json("addnew account successfully");
+             res.status(200).send("addnew account successfully");
          })
         .catch(err =>{
-            res.status(400).json(err);
+            res.status(400).send(err);
         })
      }
 });
@@ -123,11 +123,11 @@ router.post('/transhistory', (req, res)=>{
     var uid = req.token_payload.user.uid;
     AccRepos.getTransactionHistory(uid)
     .then(rows =>{
-        res.status(200).json(rows);
+        res.status(200).send(rows);
 
     })
     .catch(err=>{
-        res.status(404).json(err);
+        res.status(404).send(err);
     })
     
 });

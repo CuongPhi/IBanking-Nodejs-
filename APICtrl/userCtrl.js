@@ -43,7 +43,6 @@ router.post('/addnew', (req, res)=>{
                 });
             }
         }).catch(err=>{
-            console.log(err);
         })
         
     }

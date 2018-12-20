@@ -24,7 +24,7 @@ class AuthRepos {
         if (token) {
             jwt.verify(token, SECRET, (err, payload) => {
                 if (err) {
-                    res.statusCode = 401;
+                    res.statusCode = 405;
                     res.json({
                         msg: 'INVALID TOKEN',
                         error: err

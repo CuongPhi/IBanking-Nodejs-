@@ -4,9 +4,10 @@ var AuthRepos = require("../repos/auth");
 
 router.post("/new_token", (req, res) => {
   var user_ref_token = req.body.ref_token;
-  var user_id = req.body.id;
-  if (user_ref_token && user_id) {
-    UserRepos.getByToken(user_id, user_ref_token)
+  var user_name = req.body.user_name;
+  console.log(user_name + user_ref_token)
+  if (user_ref_token && user_name) {
+    UserRepos.getByToken(user_name, user_ref_token)
       .then(user => {
         var acToken = AuthRepos.generateAccessToken(user);
         var user_res = {
@@ -20,7 +21,7 @@ router.post("/new_token", (req, res) => {
         res.end("View error log on console");
       });
   } else {
-    res.status(404).send({
+    res.status(500).send({
       msg: "not found"
     });
   }

@@ -5,7 +5,7 @@ var moment = require('moment');
 var DbFunction = require('../db-fn/mysql-db');
 
 const SECRET = 'ABCDEF';
-const AC_LIFETIME = 6000; // seconds
+const AC_LIFETIME = 30; // seconds
 
 class AuthRepos {
     generateAccessToken(userEntity) {

@@ -29,7 +29,7 @@ class AccountRepos {
     }
     getBeneficiaryByUid(uid) {
         var sql = `SELECT * FROM ${beneficiaryTable} WHERE uid = ${uid}`;
-        return DbFunction.getOne(sql);
+        return DbFunction.load(sql);
     }
     addBeneficiaryByUid(uid, name, num ) {
         var sql = `INSERT INTO ${beneficiaryTable} 

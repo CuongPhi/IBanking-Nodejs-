@@ -124,7 +124,6 @@ router.post('/transhistory', (req, res)=>{
     AccRepos.getTransactionHistory(uid)
     .then(rows =>{
         res.status(200).send(rows);
-
     })
     .catch(err=>{
         res.status(404).send(err);

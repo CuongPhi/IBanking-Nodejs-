@@ -16,7 +16,8 @@ class UserRepos {
     }
     getByToken(username, token){
         var sql = `SELECT * FROM ${tableName}  WHERE username = '${username}' AND rfToken = '${token}'`;
-        return DbFunction.getOne(sql);
+        console.log(sql);
+         return DbFunction.getOne(sql);
     }
 
     getById(uid) {

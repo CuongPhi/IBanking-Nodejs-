@@ -48,4 +48,19 @@ router.post('/addnew', (req, res)=>{
     }
 })
 
+router.post('/profile', (req, res) => {
+    var uid = req.token_payload.user.uid;
+    UserRepos.getById(uid)
+    .then(user=>{
+        if(user) {
+            res.status(200).send(JSON.stringify(user));
+        } else {
+            res.status(403).send("An error occurred");    
+        }
+        
+    })
+    .catch(err => {
+        res.status(402).send("An error occurred");
+    })
+})
 module.exports = router;

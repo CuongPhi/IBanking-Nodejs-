@@ -16,7 +16,6 @@ class UserRepos {
     }
     getByToken(username, token){
         var sql = `SELECT * FROM ${tableName}  WHERE username = '${username}' AND rfToken = '${token}'`;
-        console.log(sql);
          return DbFunction.getOne(sql);
     }
 
@@ -33,7 +32,13 @@ class UserRepos {
         var sql = `INSERT INTO ${tableName} 
         (username, password, rfToken, name, email, phone, user_type) VALUES 
         ('${username}', '${password}', '${rfToken}', '${name}', '${email}', '${phone}', ${user_type})`;
-        console.log(sql);
+        return DbFunction.insert(sql);
+    }
+    updateUser(uid, email, phone, firstname, lastname, address, about) {
+        var sql = `UPDATE ${tableName} SET name = '${lastname}', phone = '${phone}', email = '${email}', 
+        first_name = '${firstname}', address = '${address}', about_me = '${about}' WHERE uid = ${uid}`;    
+            console.log(sql);
+
         return DbFunction.insert(sql);
     }
 }

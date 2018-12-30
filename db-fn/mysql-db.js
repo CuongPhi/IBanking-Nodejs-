@@ -25,7 +25,7 @@ class DB {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve();
+                    resolve(value);
                 }
     
              //   this.cn.end();

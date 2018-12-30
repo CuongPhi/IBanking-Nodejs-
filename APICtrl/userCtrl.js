@@ -62,5 +62,28 @@ router.post('/profile', (req, res) => {
     .catch(err => {
         res.status(402).send("An error occurred");
     })
-})
+});
+
+router.post('/update', (req, res) => {
+    var uid = req.token_payload.user.uid;
+    var email = req.body.email;
+    var f_name = req.body.first_name;
+    var name = req.body.name;
+    var address = req.body.address;
+    var about = req.body.about_me;
+    var phone = req.body.phone;
+
+    UserRepos.updateUser(uid, email, phone, f_name, name, address, about )
+    .then((user)=>{
+          if(user) {
+            res.status(200).send(JSON.stringify(user)); 
+          } else {
+            res.status(402).send("An error occurred");
+          }
+    })
+    .catch(err => {
+        res.status(402).send("An error occurred");
+    })
+});
+
 module.exports = router;

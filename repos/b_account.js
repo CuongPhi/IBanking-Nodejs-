@@ -45,13 +45,16 @@ class AccountRepos {
     }
 
     getTransactionHistory(uid) {
-        var sql = `SELECT t.account_send, t.account_recieve, t.number_money, t.note, t.time from ${tableName} as b, ${tranactionTable} as t WHERE
+        var sql = `SELECT distinct t.account_send, t.account_recieve, t.number_money, t.note, t.time from ${tableName} as b, ${tranactionTable} as t WHERE
          (b.account_number = t.account_send or b.account_number = t.account_recieve)
         and b.uid = ${uid}`;
 
         return DbFunction.load(sql);
     }
-    
+    getAllAccountNumber(uid) {
+        var sql = `SELECT account_number from ${tableName} where uid = ${uid}`;
+        return DbFunction.load(sql);
+    }
 }
 
 

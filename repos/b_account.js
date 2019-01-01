@@ -15,7 +15,11 @@ class AccountRepos {
         return DbFunction.load(`SELECT * FROM ${tableName} WHERE uid = ${uid}`)
     }
     getBankAccountsByNumber(num) {
-        return DbFunction.getOne(`SELECT * FROM ${tableName} WHERE account_number = ${num}`)
+        return DbFunction.getOne(`SELECT * FROM ${tableName} WHERE account_number = '${num}'`)
+    }
+    getNameByAccountNumber(num) {
+        return DbFunction.getOne(`SELECT name, first_name FROM ${tableName} as b,
+         ${userTalbe} as u WHERE u.uid = b.uid and b.account_number = '${num}'`);
     }
     addNewBankAccount(uid, num) {
         var sql = `INSERT INTO ${tableName} 
@@ -50,6 +54,12 @@ class AccountRepos {
         and b.uid = ${uid}`;
 
         return DbFunction.load(sql);
+    }
+    update_be(uid, name, num) {
+        var sql = `UPDATE ${beneficiaryTable} SET suggested_name = '${name}' WHERE account_number = ${num} 
+        and uid = ${uid}`;
+        console.log(sql);
+        return DbFunction.insert(sql);
     }
     
 }

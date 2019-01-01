@@ -34,11 +34,14 @@ router.post('/beneficiaries', (req, res)=>{
 
 router.post('/addbeneficiary', (req, res)=>{
     var uid = req.token_payload.user.uid;
-    var number_account = req.body.number_account;
-    var ssname = req.body.ssname;
-    AccRepos.getBankAccountsByUid(number_account)
-    .then(user => {
-        if(user) {
+    var number_account = req.body.num;
+    var ssname = req.body.sg_name;
+    if(!ssname) {
+        AccRepos.getNameByAccountNumber(number_account)
+        .then(acc =>{
+            if(acc) {
+                ssname = (acc.name + " " + acc.first_name);
+            }
             AccRepos.addBeneficiaryByUid(uid, ssname, number_account)
             .then(()=>{
                 res.status(200).send("addnew beneficiary successfully");
@@ -46,14 +49,11 @@ router.post('/addbeneficiary', (req, res)=>{
             .catch(err=>{
                 console.log(err);
                 res.status(400).send("addnew beneficiary failure !");
-            })
-        } else {
-            res.status(404).send("number account not found !");
-        }
-    }).catch(err=>{
-        console.log(err);
-        res.status(400).send("addnew beneficiary failure !");
-    });
+            }) 
+        }).catch(err => console.log(err));
+    }
+   
+
 });
 router.post('/trans', (req, res) =>{
     var from = req.body.account_from;
@@ -132,4 +132,35 @@ router.post('/transhistory', (req, res)=>{
 });
 
 
+router.post('/update_beneficiary', (req, res) => {
+    var sgname = req.body.sg_name;
+    var num = req.body.account_number;
+    var uid = req.token_payload.user.uid;
+
+    AccRepos.update_be(uid, sgname, num )
+    .then((user)=>{
+          if(user) {
+            res.status(200).send(JSON.stringify(user)); 
+          } else {
+            res.status(402).send("An error occurred");
+          }
+    })
+    .catch(err => {
+        res.status(402).send("An error occurred");
+    })
+});
+
+router.post('/check_bank_valid', (req, res) => {
+    var num = req.body.account_number;
+    AccRepos.getBankAccountsByNumber(num)
+    .then(acc=>{
+        if(acc) {
+            res.status(200).send(JSON.stringify(acc)); 
+        } else {
+          res.status(402).send("An error occurred");
+        }
+    }).catch(err => {
+        res.status(402).send("An error occurred");
+    })
+});
 module.exports = router;

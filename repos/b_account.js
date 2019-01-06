@@ -12,14 +12,14 @@ const userTalbe = 'user';
 class AccountRepos {
     
     getBankAccountsByUid(uid) {
-        return DbFunction.load(`SELECT * FROM ${tableName} WHERE uid = ${uid}`);
+        return DbFunction.load(`SELECT * FROM ${tableName} WHERE uid = ${uid} and isDelete = 0`);
     }
     getBankAccountsByNumber(num) {
-        return DbFunction.getOne(`SELECT name, first_name FROM ${tableName} as b, ${userTalbe} as u WHERE account_number = '${num}' and u.uid = b.uid`);
+        return DbFunction.getOne(`SELECT name, first_name FROM ${tableName} as b, ${userTalbe} as u WHERE account_number = '${num}' and u.uid = b.uid and isDelete = 0`);
     }
     getNameByAccountNumber(num) {
         return DbFunction.getOne(`SELECT name, first_name FROM ${tableName} as b,
-         ${userTalbe} as u WHERE u.uid = b.uid and b.account_number = '${num}'`);
+         ${userTalbe} as u WHERE u.uid = b.uid and b.account_number = '${num}' and isDelete = 0`);
     }
     addNewBankAccount(uid, num) {
         var sql = `INSERT INTO ${tableName} 
@@ -71,7 +71,7 @@ class AccountRepos {
     }
 
     getAllAccountNumber(uid) {
-        var sql = `SELECT account_number from ${tableName} where uid = ${uid}`;
+        var sql = `SELECT account_number from ${tableName} where uid = ${uid} and isDelete = 0`;
         return DbFunction.load(sql);
     }
     update_be(uid, name, num) {
@@ -79,7 +79,17 @@ class AccountRepos {
         and uid = ${uid}`;
         return DbFunction.insert(sql);
     }
-    
+    deleteAccountByUid(uid, num) {
+        var sql = `update ${tableName} set isDelete = 1 where uid = ${uid} and account_number = '${num}'`;
+        console.log(sql);
+        return DbFunction.insert(sql);
+    }
+    deleteBeneficiary(num) {
+        var sql = `Delete from ${beneficiaryTable} where account_number = '${num}'`;
+        console.log(sql)
+
+        return DbFunction.insert(sql);
+    }
 }
 
 

@@ -167,4 +167,21 @@ router.post('/check_bank_valid', (req, res) => {
         res.status(402).send("An error occurred");
     })
 });
+
+router.post('/delete_bank_account', (req, res) =>{
+    var num = req.body.account_number;
+    var uid = req.token_payload.user.uid;
+
+        AccRepos.deleteAccountByUid(uid, num)
+        .then(acc=>{
+            if(acc) {
+                res.status(200).send(JSON.stringify(acc)); 
+            } else {
+              res.status(402).send("An error occurred");
+            }
+        }).catch(err => {
+            res.status(402).send("An error occurred");
+        });
+    
+})
 module.exports = router;

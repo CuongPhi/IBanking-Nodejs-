@@ -36,25 +36,29 @@ router.post('/addbeneficiary', (req, res)=>{
     var uid = req.token_payload.user.uid;
     var number_account = req.body.num;
     var ssname = req.body.sg_name;
-    if(!ssname) {
-        AccRepos.getNameByAccountNumber(number_account)
-        .then(acc =>{
-            if(acc) {
-                ssname = (acc.name + " " + acc.first_name);
-            }
-            AccRepos.addBeneficiaryByUid(uid, ssname, number_account)
+         AccRepos.addBeneficiaryByUid(uid, ssname, number_account)
             .then(()=>{
                 res.status(200).send("addnew beneficiary successfully");
             })
             .catch(err=>{
-                console.log(err);
                 res.status(400).send("addnew beneficiary failure !");
-            }) 
-        }).catch(err => console.log(err));
-    }
-   
+        }) 
 
 });
+
+router.post('/deletebeneficiary', (req, res)=>{
+    var uid = req.token_payload.user.uid;
+    var number_account = req.body.num;
+      AccRepos.deleteBeneficiaryByUid(uid, number_account)
+            .then(()=>{
+                res.status(200).send("delete beneficiary successfully");
+            })
+            .catch(err=>{
+                res.status(400).send("delete beneficiary failure !");
+            }) 
+
+});
+
 router.post('/trans', (req, res) =>{
     var from = req.body.account_from;
     var to = req.body.account_to;
@@ -163,4 +167,21 @@ router.post('/check_bank_valid', (req, res) => {
         res.status(402).send("An error occurred");
     })
 });
+
+router.post('/delete_bank_account', (req, res) =>{
+    var num = req.body.account_number;
+    var uid = req.token_payload.user.uid;
+
+        AccRepos.deleteAccountByUid(uid, num)
+        .then(acc=>{
+            if(acc) {
+                res.status(200).send(JSON.stringify(acc)); 
+            } else {
+              res.status(402).send("An error occurred");
+            }
+        }).catch(err => {
+            res.status(402).send("An error occurred");
+        });
+    
+})
 module.exports = router;

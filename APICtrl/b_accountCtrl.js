@@ -59,13 +59,13 @@ router.post('/deletebeneficiary', (req, res)=>{
 
 });
 
-router.post('/trans', (req, res) =>{
-    var from = req.body.account_from;
-    var to = req.body.account_to;
+router.post('/tr', (req, res) =>{
+    var from = req.body.send;
+    var to = req.body.recieve;
     var money =  parseInt(req.body.money);
     var note = req.body.note;
     var type_trans = req.body.type;
-    if(!from || !to || !money || !(type_trans == 1 || type_trans == 0 )) {
+    if(!from || !to || !money || !(type_trans == '1' || type_trans == '0' )) {
         res.status(404).send('Transaction invalid, plz check again !');
     }
     Promise.all([AccRepos.getBankAccountsByNumber(from), AccRepos.getBankAccountsByNumber(to)])

@@ -15,7 +15,7 @@ class AccountRepos {
         return DbFunction.load(`SELECT * FROM ${tableName} WHERE uid = ${uid} and isDelete = 0`);
     }
     getBankAccountsByNumber(num) {
-        return DbFunction.getOne(`SELECT name, first_name FROM ${tableName} as b, ${userTalbe} as u WHERE account_number = '${num}' and u.uid = b.uid and isDelete = 0`);
+        return DbFunction.getOne(`SELECT * FROM ${tableName} as b, ${userTalbe} as u WHERE account_number = '${num}' and u.uid = b.uid and isDelete = 0`);
     }
     getNameByAccountNumber(num) {
         return DbFunction.getOne(`SELECT name, first_name FROM ${tableName} as b,
